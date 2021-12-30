@@ -20,7 +20,7 @@ public class GetNoteById extends HttpServlet {
     static final String DB_URL = "jdbc:mysql://123.60.62.134/linux_jsb";
     static final String USER = "root";
     static final String PASS = "!Yyy5210181447";
-    static final String SQL_QURERY_STUDENT_BY_ID = "SELECT id,noteoadContent  FROM note WHERE id=?";
+    static final String SQL_QURERY_NOTEPAD_BY_ID = "SELECT id,noteoadContent  FROM note WHERE id=?";
     static final String REDIS_URL = "127.0.0.1";
 
     static Connection conn = null;
@@ -54,10 +54,10 @@ public class GetNoteById extends HttpServlet {
         String json = jedis.get(request.getParameter("id"));
 
         if (json == null) {
-            Student stu = getStudent(Integer.parseInt(request.getParameter("id")));
+            Notepad note = getNotepad(Integer.parseInt(request.getParameter("id")));
 
             Gson gson = new Gson();
-            json = gson.toJson(stu, new TypeToken<Student>() {
+            json = gson.toJson(note, new TypeToken<Notepad>() {
             }.getType());
 
             jedis.set(request.getParameter("id"), json);
@@ -69,18 +69,28 @@ public class GetNoteById extends HttpServlet {
         out.flush();
         out.close();
     }
+public class Notepad {
+    int id;
+    String notepadContent;
+    String notepadTime;
 
-    public Note getNote(int id) {
-        Note note = new Note();
+    @Override
+    public String toString() {
+        return "Notepad [ notepadContent=" + notepadContent + ", notepadTime=" + notepadTime + "]";
+    }
+}
+    public Notepad getNotepad(int id) {
+        Notepad note = new Notepad();
         PreparedStatement stmt = null;
         try {
-            stmt = conn.prepareStatement(SQL_QURERY_STUDENT_BY_ID);
+            stmt = conn.prepareStatement(SQL_QURERY_NOTEPAD_BY_ID);
             stmt.setInt(1, id);
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 note.id = rs.getInt("id");
-                note.name = rs.getString("name");
+                note.notepadContent = rs.getString("notepadContent");
+               note.notepadTime = rs.getString("notepadTime");
             }
 
             rs.close();

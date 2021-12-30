@@ -32,6 +32,16 @@ public class UpdateNote extends HttpServlet {
       out.close();
    }
 
+public class Notepad {
+    int id;
+    String notepadContent;
+    String notepadTime;
+
+    @Override
+    public String toString() {
+        return "Notepad [ notepadContent=" + notepadContent + ", notepadTime=" + notepadTime + "]";
+    }
+}
    private Notepad getRequestBody(HttpServletRequest request) throws IOException {
       Notepad note = new Notepad();
       StringBuffer bodyJ = new StringBuffer();
@@ -52,7 +62,7 @@ public class UpdateNote extends HttpServlet {
       try {
          Class.forName(JDBC_DRIVER);
          conn = DriverManager.getConnection(URL, USER, PASS);
-         stmt = conn.prepareStatement(SQL_INSERT_NOTEPAD);
+         stmt = conn.prepareStatement(SQL_UPDATE_NOTEPAD);
        
         stmt.setString(1, req.notepadContent);
          stmt.setString(2, req.notepadTime);

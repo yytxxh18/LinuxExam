@@ -32,6 +32,19 @@ public class CreateNote extends HttpServlet {
       out.close();
    }
 
+
+public class Notepad {
+    int id;
+    String notepadContent;
+    String notepadTime;
+
+    @Override
+    public String toString() {
+        return "Notepad [ notepadContent=" + notepadContent + ", notepadTime=" + notepadTime + "]";
+    }
+}
+
+
    private Notepad getRequestBody(HttpServletRequest request) throws IOException {
       Notepad note = new Notepad();
       StringBuffer bodyJ = new StringBuffer();
@@ -48,7 +61,7 @@ public class CreateNote extends HttpServlet {
    private int createNote(Notepad req) {
       Connection conn = null;
       PreparedStatement stmt = null;
-      int retjsb = -1;
+      int retnote = -1;
       try {
          Class.forName(JDBC_DRIVER);
          conn = DriverManager.getConnection(URL, USER, PASS);
@@ -58,7 +71,7 @@ public class CreateNote extends HttpServlet {
          stmt.setString(2, req.notepadTime);
          int row = stmt.executeUpdate();
          if (row > 0)
-            retjsb = 1;
+            retnote = 1;
 
          stmt.close();
          conn.close();
@@ -76,6 +89,6 @@ public class CreateNote extends HttpServlet {
             se.printStackTrace();
          }
       }
-      return retjsb;
+      return retnote;
    }
 }

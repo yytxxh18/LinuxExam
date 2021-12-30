@@ -31,6 +31,18 @@ public class DeleteNote extends HttpServlet {
       out.close();
    }
 
+public class Notepad {
+    int id;
+    String notepadContent;
+    String notepadTime;
+
+    @Override
+    public String toString() {
+        return "Notepad [ notepadContent=" + notepadContent + ", notepadTime=" + notepadTime + "]";
+    }
+}
+
+
    private Notepad getRequestBody(HttpServletRequest request) throws IOException {
       Notepad note = new Notepad();
       StringBuffer bodyJ = new StringBuffer();
@@ -47,7 +59,7 @@ public class DeleteNote extends HttpServlet {
    private int deleteNote(Notepad req) {
       Connection conn = null;
       PreparedStatement stmt = null;
-      int retnote = -1;
+      int retcode = -1;
       try {
          Class.forName(JDBC_DRIVER);
          conn = DriverManager.getConnection(URL, USER, PASS);
@@ -57,7 +69,7 @@ public class DeleteNote extends HttpServlet {
          int row = stmt.executeUpdate();
          if (row > 0)
             retcode = 1;
-
+           
          stmt.close();
          conn.close();
       } catch (SQLException se) {
@@ -74,6 +86,6 @@ public class DeleteNote extends HttpServlet {
             se.printStackTrace();
          }
       }
-      return retnote;
+      return retcode;
    }
 }
